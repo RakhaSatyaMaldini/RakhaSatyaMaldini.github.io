@@ -188,7 +188,12 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <form>
+            <div class="alert alert-success alert-dismissible fade show d-none my-alert" role="alert">
+              <strong>
+                Thank You!</strong> We have received your message.
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form name="rakha satya maldini-contact-form">
               <div class="mb-3">
                 <label
                   for="Name"
@@ -199,7 +204,7 @@
                   type="Text"
                   class="form-control"
                   id="name"
-                  aria-describedby="name"
+                  aria-describedby="name" name="full name"
                 />
                
                 <div class="mb-3">
@@ -212,18 +217,21 @@
                     type="email"
                     class="form-control"
                     id="email"
-                    aria-describedby="email"
+                    aria-describedby="email" name="email"
                   />
               </div>
               <div class="mb-3">
                 <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" rows="3"></textarea>
+                <textarea class="form-control" id="message" rows="3" name="message"></textarea>
               </div>
               <button
                 type="kirim"
-                class="btn btn-primary"
+                class="btn btn-primary btn-submit"
               >
                 Submit
+              </button><button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                <span role="status">Loading...</span>
               </button>
             </form>
           </div>
@@ -237,7 +245,7 @@
 
     <!-- Footer -->
     <footer class="bg-primary text-white text-center pb-3">
-      <p>Created with <i class="bi bi-heart-fill text-danger"></i> by <a href="" class="text-white fw-bold">Rakha Satya Maldini</a></p>
+      <p>Created with <i class="bi bi-heart-fill text-danger"></i> by <a href="" class="text-white">Rakha Satya Maldini</a></p>
     </footer>
     <!-- Akhir Footer -->
     
@@ -246,5 +254,33 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+
+    <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxBUcK29CDbEl6Vv6XPXsJ78EFCbb991qhE6jIXX7dhSZBuYZJT4HroxBedncsFRntb_g/exec'
+      const form = document.forms['rakha satya maldini-contact-form']
+      const btnSubmit = document.querySelector('.btn-submit');
+      const btnLoading = document.querySelector('.btn-loading');
+      const myAlert = document.querySelector('.my-alert');
+
+      form.addEventListener('submit', e => {
+        e.preventDefault()
+        // Ketika tombol sumit diklik
+        // Tampilkan tombol loading, hilangkan tombol Submit
+        btnLoading.classList.toggle('d-none');
+        btnSubmit.classList.toggle('d-none');
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+          .then(response => {
+            // Tampilkan tombol Submit, hilangkan tombol Loading
+            btnLoading.classList.toggle('d-none');
+            btnSubmit.classList.toggle('d-none');
+            // Tampilkan alert
+            myAlert.classList.toggle('d-none');
+            // Reset formnya
+            form.reset();
+            console.log('Success!', response);
+          })
+          .catch(error => console.error('Error!', error.message))
+      })
+    </script>
   </body>
 </html>
